@@ -17,6 +17,7 @@ enum NewsView: String, CaseIterable {
 
 struct MainView: View {
     @StateObject var viewModel = ViewModel()
+    @EnvironmentObject var network: NetworkService
     
     var body: some View {
         NavigationView {
@@ -49,7 +50,16 @@ struct MainView: View {
             .background(Color.beigeApp)
             
         }
+        .task {
+            do {
+                try await network.getNews()
+                try await network.getBlocks()
+            } catch {
+                
+            }
+        }
         .onAppear{
+           
             let appearance = UINavigationBarAppearance()
             appearance.largeTitleTextAttributes = [
                 .foregroundColor: UIColor(Color.blackApp)
@@ -59,5 +69,6 @@ struct MainView: View {
             ]
             UINavigationBar.appearance().standardAppearance = appearance
         }
+     
     }
 }

@@ -8,56 +8,61 @@
 import SwiftUI
 
 struct CellNews: View {
+    let new: Result
+    
     var body: some View {
-        HStack{
-            AsyncImage(url: URL(string: "https://static01.nyt.com/images/2025/04/15/multimedia/14nat-harvard-letter-sldf/15nat-university-weath-jflv-mediumThreeByTwo210.jpg"), content: { image in image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .cornerRadius(Sizes.cornerRadiusSmall)
-            }, placeholder: {
-                ProgressView()
-                    .frame(width: Sizes.imageNewsHeight)
-            })
-            .padding()
-           
-            VStack(alignment: .leading){
-                Text("fkmvk")
-                    .lineLimit(1)
-                    .foregroundColor(.blackApp)
-                    .font(.title3)
-                    .fontWeight(.medium)
-                    .padding(.bottom)
-                Text("nfvkvk")
-                    .lineLimit(1)
-                    .foregroundColor(.greyApp)
-                    .padding(.bottom)
-                HStack{
-                    Text("Culture")
-                        .foregroundColor(.greyApp)
+        
+        Link(destination: URL(string: new.url ?? "")!) {
+            HStack{
+                AsyncImage(url: URL(string: new.media?.first?.mediaMetaData?.first?.url ?? ""), content: { image in image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .cornerRadius(Sizes.cornerRadiusSmall)
+                    //                    .clipped()
+                }, placeholder: {
+                    ProgressView()
+                        .frame(width: Sizes.imageNewsWidth, height: Sizes.imageNewsHeight)
+                })
+                .padding()
+                
+                VStack(alignment: .leading){
+                    HStack(alignment: .top){
+                        VStack(alignment: .leading){
+                            Text(new.title ?? "")
+                                .lineLimit(1)
+                                .foregroundColor(.blackApp)
+                                .font(Font.system(size: 17))
+                                .fontWeight(.medium)
+                            Text(new.abstract ?? "")
+                                .lineLimit(1)
+                                .font(Font.system(size: 15))
+                                .foregroundColor(.greyApp)
+                                .fontWeight(.regular)
+                        }
+                        Spacer()
+                        Button {
+                            
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                                .frame(width: Sizes.systemImage, height: Sizes.systemImage)
+                                .foregroundColor(.greyApp)
+                        }
+                        .padding(.trailing, Spacing.standart)
+                    }
                     
-                    Text("• 24.April 2034")
+                    Text((new.section ?? "") + "•" + new.formattedPublishedDate)
                         .foregroundColor(.greyApp)
+                        .font(Font.system(size: 15))
+                    
                 }
             }
-            .padding()
-      
-            Button {
-                
-            } label: {
-                Image(systemName: "ellipsis.circle")
-                    .frame(width: Sizes.systemImage, height: Sizes.systemImage)
-                    .foregroundColor(.greyApp)
-            }
-            .padding()
+            .background(Color.whiteApp)
+            .cornerRadius(Sizes.cornerRadiusStandart)
+            .frame(height: Sizes.cellHeight)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, Spacing.standart)
+            .padding(.vertical, Spacing.standart)
         }
-        .background(Color.whiteApp)
-        .cornerRadius(Sizes.cornerRadiusStandart)
-        .frame(height: Sizes.cellHeight)
-        .frame(maxWidth: .infinity)
-//        .padding()
     }
 }
 
-#Preview {
-    CellNews()
-}
