@@ -9,6 +9,7 @@ import Foundation
 
 enum Sizes {    
     static let systemImage = 24.0
+    static let systemImageBig = 48.0
     static let imageNewsWidth = 94.0
     static let imageNewsHeight = 72.0
     static let cornerRadiusSmall = 4.0

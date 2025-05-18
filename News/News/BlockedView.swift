@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct BlockedView: View {
+    @EnvironmentObject var dataService: DataServices
+    
     var body: some View {
-        Text("BlockedView")
+        VStack{
+            if dataService.blocked.isEmpty {
+                Spacer()
+                EmptyViewApp(item: .blocked)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            else {
+                ForEach(dataService.blocked, id: \.id) {blocked in
+                    CellBlocked(favorites: blocked)
+                }
+            }
+        }
     }
 }
 
-#Preview {
-    BlockedView()
-}

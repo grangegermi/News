@@ -8,11 +8,25 @@
 import SwiftUI
 
 struct FavoritesView: View {
+    @EnvironmentObject var dataService: DataServices
+    
     var body: some View {
-        Text("FavoritesView")
+            if dataService.favorites.isEmpty {
+                ZStack{
+                    EmptyViewApp(item: .favorites)
+                    VStack{
+                        EmptyView()
+                    }
+                }
+                }
+             else {
+                VStack{
+                ForEach(dataService.favorites, id: \.id) {fav in
+                    CellFavorites(favorites: fav)
+                }
+            }
+            
+        }
     }
 }
 
-#Preview {
-    FavoritesView()
-}

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CellBlocks: View {
     let block: ResultBlocks
-    
+    @State var showAlert = false
     var body: some View {
         VStack{
             Image(systemName: block.titleSymbol ?? "")
@@ -25,7 +25,6 @@ struct CellBlocks: View {
                 .foregroundColor(.greyApp)
                 .fontWeight(.regular)
             Button {
-                
             } label: {
                 ZStack{
                     Text(block.buttonTitle)
@@ -40,12 +39,12 @@ struct CellBlocks: View {
                     }
                     .padding(.horizontal, Spacing.standart)
                 }
+              
                 .frame(height: Sizes.buttonHeight)
                 .background(Color.blueApp)
                 .cornerRadius(Sizes.cornerRadiusSmall)
                 .padding(Spacing.standart)
             }
-           
         }
         .frame(height: Sizes.cellHeightBig)
         .background(Color.whiteApp)
