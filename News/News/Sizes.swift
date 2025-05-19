@@ -16,7 +16,8 @@ enum Sizes {
     static let cornerRadiusStandart = 8.0
     static let cellHeight = 96.0
     static let cellHeightBig = 144.0
-    static let buttonHeight = 44.0
+    
+    static let buttonHeight = 44.0  
 }
 
 enum Spacing {

@@ -40,22 +40,20 @@ extension Empty {
     
 }
 
-
 struct EmptyViewApp: View {
     let item: Empty
+    
     var body: some View {
         VStack{
-           
             Image(systemName: item.image)
                 .frame(width: Sizes.systemImageBig, height: Sizes.systemImage)
                 .foregroundColor(.blueApp)
             Text(item.title)
                 .fontWeight(.bold)
                 .foregroundColor(.blackApp)
-            
+                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.beigeApp)
-        .multilineTextAlignment(.center)
+        .padding(.top, UIScreen.main.bounds.height * 0.2 )
     }
 }

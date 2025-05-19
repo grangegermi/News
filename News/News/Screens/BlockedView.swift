@@ -13,7 +13,6 @@ struct BlockedView: View {
     var body: some View {
         VStack{
             if dataService.blocked.isEmpty {
-                Spacer()
                 EmptyViewApp(item: .blocked)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }

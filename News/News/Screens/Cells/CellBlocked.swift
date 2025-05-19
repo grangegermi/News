@@ -11,22 +11,23 @@ struct CellBlocked: View {
     @EnvironmentObject var dataService: DataServices
     let favorites: FavoriteItem
     @State private var showAlert = false
+    
     var body: some View {
-            HStack{
-                AsyncImage(url: URL(string: favorites.image ?? ""), content: { image in image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(Sizes.cornerRadiusSmall)
-                }, placeholder: {
-                    ProgressView()
-                        .frame(width: Sizes.imageNewsWidth, height: Sizes.imageNewsHeight)
-                })
-                .padding()
+        HStack{
+            AsyncImage(url: URL(string: favorites.image ?? ""), content: { image in image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .cornerRadius(Sizes.cornerRadiusSmall)
+            }, placeholder: {
+                ProgressView()
+                    .frame(width: Sizes.imageNewsWidth, height: Sizes.imageNewsHeight)
+            })
+            .padding()
+            
+            VStack(alignment: .leading){
                 
-                VStack(alignment: .leading){
-                   
-                    HStack(alignment: .top){
-                        //                        Link(destination: URL(string: new.url ?? "")!) {
+                HStack(alignment: .top){
+                    Link(destination: URL(string: favorites.url ?? "")!) {
                         VStack(alignment: .leading){
                             Text(favorites.title ?? "")
                                 .lineLimit(1)
@@ -57,27 +58,27 @@ struct CellBlocked: View {
                             Button("Unlock", role: .destructive) {
                                 dataService.removeBlockedNews(id: favorites.id ?? "")
                                 print(dataService.blocked.count)
-                                }
+                            }
                             Button("Cancel", role: .cancel) { }
                         },
                                message: {
                             Text("Confirm to hide this news source")
                         })
                         .padding(.trailing, Spacing.standart)
-                        //                        }
                     }
-                    Text((favorites.section ?? "") + "•" + (favorites.publishedDate ?? ""))
-                        .foregroundColor(.greyApp)
-                        .font(Font.system(size: 15))
                 }
+                Text((favorites.section ?? "") + "•" + (favorites.publishedDate ?? ""))
+                    .foregroundColor(.greyApp)
+                    .font(Font.system(size: 15))
             }
-            .background(Color.whiteApp)
-            .cornerRadius(Sizes.cornerRadiusStandart)
-            .frame(height: Sizes.cellHeight)
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, Spacing.standart)
-            .padding(.vertical, Spacing.standart)
         }
+        .background(Color.whiteApp)
+        .cornerRadius(Sizes.cornerRadiusStandart)
+        .frame(height: Sizes.cellHeight)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, Spacing.standart)
+        .padding(.vertical, Spacing.standart)
+    }
 }
 
 

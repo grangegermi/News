@@ -8,8 +8,6 @@
 import Foundation
 import CoreData
 
-
-
 class PersistenceController  {
     
    static let shared = PersistenceController()
@@ -23,14 +21,10 @@ class PersistenceController  {
         container = NSPersistentContainer(name: "FavoritesModel")
         container.loadPersistentStores { description, error in
             if let error = error {
-                fatalError("❌ Ошибка при загрузке persistent store: \(error)")
+                fatalError("\(error)")
             } else {
-                print("✅ Core Data загружен: \(description)")
+                print("\(description)")
             }
         }
-    }
-    
-   
-
-    
+    } 
 }

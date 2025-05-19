@@ -10,11 +10,19 @@ import SwiftUI
 struct AllNews: View {
     @EnvironmentObject var network: NetworkService
     @EnvironmentObject var dataService: DataServices
+    @Binding var loanding:Bool
+    
     var body: some View {
         VStack{
             if network.news?.results?.isEmpty == true {
                 EmptyViewApp(item: .all)
                 Button {
+                    loanding = true
+                    Task{
+                        try await network.getNews()
+                        try await network.getBlocks()
+                        loanding = false
+                    }
                 } label: {
                     ZStack{
                         Text("Refresh")
@@ -29,12 +37,14 @@ struct AllNews: View {
                         }
                         .padding(.horizontal, Spacing.standart)
                     }
-                  
+                    
                     .frame(height: Sizes.buttonHeight)
                     .background(Color.blueApp)
                     .cornerRadius(Sizes.cornerRadiusSmall)
                     .padding(Spacing.standart)
+                    .padding(.horizontal, 20)
                 }
+                
             } else {
                 if let news = network.news?.results{
                     ForEach(Array(news.enumerated()), id: \.1.id) { index, new in
@@ -51,4 +61,3 @@ struct AllNews: View {
         }
     }
 }
-

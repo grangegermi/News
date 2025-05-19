@@ -27,7 +27,7 @@ extension ActionButton {
     func image(isFav: Bool) -> String {
         switch self {
         case .favorites:
-            return  isFav ? "heart.slash" : "heart.slash"
+            return  isFav ? "heart.slash" : "heart"
         case .blocked:
             return "nosign"
         }
@@ -42,7 +42,6 @@ extension ActionButton {
         }
     }
 }
-
 
 struct MenuView: View {
     @EnvironmentObject var dataService: DataServices

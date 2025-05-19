@@ -11,6 +11,7 @@ import SwiftUI
 struct CellBlocks: View {
     let block: ResultBlocks
     @State var showAlert = false
+    
     var body: some View {
         VStack{
             Image(systemName: block.titleSymbol ?? "")

@@ -27,7 +27,7 @@ class DataServices: ObservableObject {
             favorites = allNews.filter { !$0.isBlocked }
             blocked = allNews.filter { $0.isBlocked }
         } catch {
-            print(error)
+            DataError.failedFetch
         }
     }
     
@@ -49,9 +49,9 @@ class DataServices: ObservableObject {
     func removeNews(id: String) {
         let request: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-               NSPredicate(format: "id == %@", id),
-               NSPredicate(format: "isBlocked == NO")
-           ])
+            NSPredicate(format: "id == %@", id),
+            NSPredicate(format: "isBlocked == NO")
+        ])
         
         do {
             let results = try context.fetch(request)
@@ -59,7 +59,7 @@ class DataServices: ObservableObject {
             saveContext()
             fetchNews()
         } catch {
-            print(error)
+            DataError.failedRemove
         }
     }
     
@@ -76,19 +76,16 @@ class DataServices: ObservableObject {
             saveContext()
             fetchNews()
         } catch {
-            print("Failed to delete blocked news:", error)
+            DataError.failedRemove
         }
     }
-
-    
     
     private func saveContext() {
         do {
             try context.save()
         } catch {
-            print("Ошибка сохранения: \(error)")
+            DataError.failedSaved
         }
-    }
-    
+    }    
 }
 

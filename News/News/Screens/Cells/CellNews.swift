@@ -14,37 +14,33 @@ struct CellNews: View {
     
     var body: some View {
         ZStack{
-            
             HStack{
                 AsyncImage(url: URL(string: new.media?.first?.mediaMetaData?.first?.url ?? ""), content: { image in image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(Sizes.cornerRadiusSmall)
-                    //                    .clipped()
                 }, placeholder: {
                     ProgressView()
                         .frame(width: Sizes.imageNewsWidth, height: Sizes.imageNewsHeight)
                 })
                 .padding()
-                
                 VStack(alignment: .leading){
-                    
                     HStack(alignment: .top){
-                        //                        Link(destination: URL(string: new.url ?? "")!) {
-                        VStack(alignment: .leading){
-                            Text(new.title ?? "")
-                                .lineLimit(1)
-                                .foregroundColor(.blackApp)
-                                .font(Font.system(size: 17))
-                                .fontWeight(.medium)
-                            Text(new.abstract ?? "")
-                                .lineLimit(1)
-                                .font(Font.system(size: 15))
-                                .foregroundColor(.greyApp)
-                                .fontWeight(.regular)
+                        Link(destination: URL(string: new.url ?? "")!) {
+                            VStack(alignment: .leading){
+                                Text(new.title ?? "")
+                                    .lineLimit(1)
+                                    .foregroundColor(.blackApp)
+                                    .font(Font.system(size: 17))
+                                    .fontWeight(.medium)
+                                Text(new.abstract ?? "")
+                                    .lineLimit(1)
+                                    .font(Font.system(size: 15))
+                                    .foregroundColor(.greyApp)
+                                    .fontWeight(.regular)
+                            }
                         }
                         Spacer()
-                        
                         let isFavorite = dataService.favorites.contains(where: { $0.id == String(new.id ?? 0)})
                         MenuView(action: [
                             .favorites: {
@@ -92,17 +88,15 @@ struct CellNews: View {
                     Text((new.section ?? "") + "•" + new.formattedPublishedDate)
                         .foregroundColor(.greyApp)
                         .font(Font.system(size: 15))
-                    
                 }
             }
-            
             .background(Color.whiteApp)
             .cornerRadius(Sizes.cornerRadiusStandart)
             .frame(height: Sizes.cellHeight)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, Spacing.standart)
             .padding(.vertical, Spacing.standart)
-            
         }
+        
     }
 }
