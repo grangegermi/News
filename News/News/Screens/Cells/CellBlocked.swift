@@ -9,8 +9,11 @@ import SwiftUI
 
 struct CellBlocked: View {
     @EnvironmentObject var dataService: DataServices
-    let favorites: FavoriteItem
+    @EnvironmentObject var alertManager: AlertManager
+    
     @State private var showAlert = false
+    
+    let favorites: FavoriteItem
     
     var body: some View {
         HStack{
@@ -23,53 +26,50 @@ struct CellBlocked: View {
                     .frame(width: Sizes.imageNewsWidth, height: Sizes.imageNewsHeight)
             })
             .padding()
-            
             VStack(alignment: .leading){
-                
                 HStack(alignment: .top){
-                    Link(destination: URL(string: favorites.url ?? "")!) {
-                        VStack(alignment: .leading){
-                            Text(favorites.title ?? "")
-                                .lineLimit(1)
-                                .foregroundColor(.blackApp)
-                                .font(Font.system(size: 17))
-                                .fontWeight(.medium)
-                            Text(favorites.abstract ?? "")
-                                .lineLimit(1)
-                                .font(Font.system(size: 15))
-                                .foregroundColor(.greyApp)
-                                .fontWeight(.regular)
-                        }
-                        Spacer()
-                        Menu {
-                            Button(role: .destructive) {
-                                showAlert = true
-                            } label: {
-                                Label("Unblock", systemImage: "lock.open")
+                    if let urlString = favorites.url, let url = URL(string: urlString) {
+                        Link(destination: url) {
+                            VStack(alignment: .leading){
+                                Text(favorites.title ?? "")
+                                    .lineLimit(1)
+                                    .foregroundColor(.blackApp)
+                                    .font(Font.system(size: Sizes.sizeFontStandart))
+                                    .fontWeight(.medium)
+                                Text(favorites.abstract ?? "")
+                                    .lineLimit(1)
+                                    .font(Font.system(size: Sizes.sizeFont))
+                                    .foregroundColor(.greyApp)
+                                    .fontWeight(.regular)
                             }
+                        }
+                    }
+                    Spacer()
+                    Menu {
+                        Button(role: .destructive) {
+                            alertManager.showCustomAlert(
+                                title: "Do you want to unblock?",
+                                message: "Confirm to hide this news source",
+                                item: .unblockButton,
+                                onBlock: {
+                                    dataService.removeBlockedNews(id: favorites.id ?? "")
+                                },
+                                
+                                onCancel: {}
+                            )
                         } label: {
-                            Image(systemName: "ellipsis.circle")
-                                .frame(width: Sizes.systemImage, height: Sizes.systemImage)
-                                .foregroundColor(.greyApp)
+                            Label("Unblock", systemImage: "lock.open")
                         }
-                        .alert("Do you want to Ulock?",
-                               isPresented: $showAlert,
-                               actions: {
-                            Button("Unlock", role: .destructive) {
-                                dataService.removeBlockedNews(id: favorites.id ?? "")
-                                print(dataService.blocked.count)
-                            }
-                            Button("Cancel", role: .cancel) { }
-                        },
-                               message: {
-                            Text("Confirm to hide this news source")
-                        })
-                        .padding(.trailing, Spacing.standart)
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                            .frame(width: Sizes.systemImage, height: Sizes.systemImage)
+                            .foregroundColor(.greyApp)
                     }
                 }
+                .padding(.trailing, Spacing.standart)
                 Text((favorites.section ?? "") + "•" + (favorites.publishedDate ?? ""))
                     .foregroundColor(.greyApp)
-                    .font(Font.system(size: 15))
+                    .font(Font.system(size: Sizes.sizeFont))
             }
         }
         .background(Color.whiteApp)

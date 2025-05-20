@@ -45,9 +45,11 @@ extension ActionButton {
 
 struct MenuView: View {
     @EnvironmentObject var dataService: DataServices
+    
     let items = ActionButton.allCases
     let action: [ActionButton:() -> Void]
     let isFav: Bool
+    
     var body: some View {
         Menu {
             ForEach(items, id: \.self ) { item in

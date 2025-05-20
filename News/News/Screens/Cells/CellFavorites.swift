@@ -9,7 +9,10 @@ import SwiftUI
 
 struct CellFavorites: View {
     @EnvironmentObject var dataService: DataServices
+    @EnvironmentObject var alertManager: AlertManager
+    
     @State private var showAlert = false
+    
     let favorites: FavoriteItem
     
     var body: some View {
@@ -25,18 +28,20 @@ struct CellFavorites: View {
             .padding()
             VStack(alignment: .leading){
                 HStack(alignment: .top){
-                    Link(destination: URL(string: favorites.url ?? "")!) {
-                        VStack(alignment: .leading){
-                            Text(favorites.title ?? "")
-                                .lineLimit(1)
-                                .foregroundColor(.blackApp)
-                                .font(Font.system(size: 17))
-                                .fontWeight(.medium)
-                            Text(favorites.abstract ?? "")
-                                .lineLimit(1)
-                                .font(Font.system(size: 15))
-                                .foregroundColor(.greyApp)
-                                .fontWeight(.regular)
+                    if let urlString = favorites.url, let url = URL(string: urlString) {
+                        Link(destination: url) {
+                            VStack(alignment: .leading){
+                                Text(favorites.title ?? "")
+                                    .lineLimit(1)
+                                    .foregroundColor(.blackApp)
+                                    .font(Font.system(size: Sizes.sizeFontStandart))
+                                    .fontWeight(.medium)
+                                Text(favorites.abstract ?? "")
+                                    .lineLimit(1)
+                                    .font(Font.system(size: Sizes.sizeFont))
+                                    .foregroundColor(.greyApp)
+                                    .fontWeight(.regular)
+                            }
                         }
                     }
                     Spacer()
@@ -48,33 +53,31 @@ struct CellFavorites: View {
                             }
                         },
                         .blocked: {
-                            showAlert = true
-                        }                        
+                            alertManager.showCustomAlert(
+                                title: "Do you want to block?",
+                                message: "Confirm to hide this news source",
+                                item: .blockButton,
+                                onBlock: {
+                                    dataService.addNews(id: favorites.id ?? "",
+                                                        title: favorites.title ?? "",
+                                                        url: favorites.url ?? "",
+                                                        image: favorites.image ?? "",
+                                                        isBlocked: true,
+                                                        publishedDate: favorites.publishedDate ?? "",
+                                                        section: favorites.section ?? "",
+                                                        abstract: favorites.abstract ?? "")
+                                    dataService.removeNews(id: favorites.id ?? "")
+                                },
+                                onCancel: {}
+                                
+                            )
+                        }
                     ], isFav: isFavorite)
                 }
-                .alert("Do you want to block?",
-                       isPresented: $showAlert,
-                       actions: {
-                    Button("Block", role: .destructive) {
-                        dataService.addNews(id: favorites.id ?? "",
-                                            title: favorites.title ?? "",
-                                            url: favorites.url ?? "",
-                                            image: favorites.image ?? "",
-                                            isBlocked: true,
-                                            publishedDate: favorites.publishedDate ?? "",
-                                            section: favorites.section ?? "",
-                                            abstract: favorites.abstract ?? "")
-                        dataService.removeNews(id: favorites.id ?? "")
-                    }
-                    Button("Cancel", role: .cancel) { }
-                },
-                       message: {
-                    Text("Confirm to hide this news source")
-                })
                 .padding(.trailing, Spacing.standart)
                 Text((favorites.section ?? "") + "•" + (favorites.publishedDate ?? ""))
                     .foregroundColor(.greyApp)
-                    .font(Font.system(size: 15))
+                    .font(Font.system(size: Sizes.sizeFont))
             }
             
         }

@@ -19,6 +19,7 @@ class DataServices: ObservableObject {
         fetchNews()
     }
     
+//MARK: fetch news
     func fetchNews() {
         let request: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
         
@@ -31,6 +32,7 @@ class DataServices: ObservableObject {
         }
     }
     
+    //MARK: add news
     func addNews(id: String, title: String, url: String, image: String, isBlocked: Bool, publishedDate: String, section:String, abstract: String) {
         let news = FavoriteItem(context: context)
         news.id = id
@@ -46,6 +48,7 @@ class DataServices: ObservableObject {
         fetchNews()
     }
     
+    //MARK: add favorite news  to block
     func removeNews(id: String) {
         let request: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
@@ -63,6 +66,7 @@ class DataServices: ObservableObject {
         }
     }
     
+    //MARK: unblock news
     func removeBlockedNews(id: String) {
         let request: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
@@ -80,6 +84,7 @@ class DataServices: ObservableObject {
         }
     }
     
+    //MARK: save context
     private func saveContext() {
         do {
             try context.save()

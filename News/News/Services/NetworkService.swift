@@ -8,11 +8,13 @@
 import Foundation
 
 class NetworkService: ObservableObject {    
-    private let baseUrl = "https://us-central1-server-side-functions.cloudfunctions.net"
-    private let authorization = "darya-voloshyna"
     @Published var news: News?
     @Published var block: Blocks?
     
+    private let baseUrl = "https://us-central1-server-side-functions.cloudfunctions.net"
+    private let authorization = "darya-voloshyna"
+  
+    //MARK: get news
     func getNews ()  async throws  -> News? {
         guard let url = URL(string: baseUrl + "/nytimes?period=1") else {
             throw NetworkError.decodingError
@@ -40,6 +42,7 @@ class NetworkService: ObservableObject {
         return news
     }
     
+    //MARK: get more blocks
     func getBlocks() async throws -> Blocks? {
         guard let url = URL(string: baseUrl + "/supplementary") else {
             throw NetworkError.decodingError

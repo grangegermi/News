@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CellBlocks: View {
     let block: ResultBlocks
+    
     @State var showAlert = false
     
     var body: some View {
@@ -19,10 +20,10 @@ struct CellBlocks: View {
                 .foregroundColor(.blueApp)
             Text(block.title)
                 .foregroundColor(.blackApp)
-                .font(Font.system(size: 17))
+                .font(Font.system(size: Sizes.sizeFontStandart))
                 .fontWeight(.medium)
             Text(block.subTitle ?? "")
-                .font(Font.system(size: 15))
+                .font(Font.system(size: Sizes.sizeFont))
                 .foregroundColor(.greyApp)
                 .fontWeight(.regular)
             Button {
@@ -30,7 +31,7 @@ struct CellBlocks: View {
                 ZStack{
                     Text(block.buttonTitle)
                         .foregroundColor(.whiteApp)
-                        .font(Font.system(size: 17))
+                        .font(Font.system(size: Sizes.sizeFontStandart))
                         .fontWeight(.medium)
                     HStack{
                         Spacer()

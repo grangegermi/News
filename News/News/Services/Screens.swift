@@ -26,7 +26,6 @@ enum AppScreens: String, Hashable, CaseIterable{
         }
 }
 
-
 class ViewModel: ObservableObject {
     @Published var screen = AppScreens.news
 }

@@ -7,19 +7,15 @@
 
 import SwiftUI
 
-//enum NewsView: String, CaseIterable {
-//    case news = "All"
-//    case favorites = "Favorites"
-//    case blocked = "Blocked"
-//    
-//    var id: String{rawValue}
-//}
-
 struct MainView: View {
     @StateObject var viewModel = ViewModel()
+    @StateObject var alertManager = AlertManager()
+    
     @EnvironmentObject var network: NetworkService
+    
     @State var isLoanding = false
     @State var showAlert = false
+    @State var showAlertCustom = false
     @State private var errorMessage = ""
     
     var body: some View {
@@ -62,6 +58,7 @@ struct MainView: View {
                     }
                 }
             }
+            .environmentObject(alertManager)
             .onAppear{
                 let appearance = UINavigationBarAppearance()
                 appearance.largeTitleTextAttributes = [
@@ -82,21 +79,43 @@ struct MainView: View {
             }
             if isLoanding{
                 ZStack{
-                    Color.black.opacity(0.3)
+                    Color.black.opacity(0.4)
                     ProgressView()
                         .padding()
-                        .cornerRadius(10)
+                        .cornerRadius(Sizes.cornerRadiusMiddle)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
                 .background(.ultraThinMaterial)
             }
             if showAlert {
-                Color.black.opacity(0.3)
+                Color.black.opacity(0.4)
                     .ignoresSafeArea()
                     .background(.ultraThinMaterial)
                     .transition(.opacity)
                     .zIndex(1)
+            }
+            if alertManager.showAlert {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .background(.ultraThinMaterial)
+                    .transition(.opacity)
+                    .zIndex(1)
+                CustomAlert(
+                    title: alertManager.alertTitle,
+                    message: alertManager.alertMessage,
+                    item: alertManager.item,
+                    onBlock: {
+                        alertManager.onBlock?()
+                        alertManager.dismiss()
+                    },
+                    onCancel: {
+                        alertManager.onCancel?()
+                        alertManager.dismiss()
+                    }
+                )
+                .transition(.scale)
+                .zIndex(1)
             }
         }
     }

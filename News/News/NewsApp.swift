@@ -16,7 +16,7 @@ struct NewsApp: App {
         WindowGroup {
             MainView()
                 .environmentObject(network)
-                .environmentObject(dataService)            
+                .environmentObject(dataService)  
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

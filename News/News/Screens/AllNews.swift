@@ -10,6 +10,7 @@ import SwiftUI
 struct AllNews: View {
     @EnvironmentObject var network: NetworkService
     @EnvironmentObject var dataService: DataServices
+    
     @Binding var loanding:Bool
     
     var body: some View {
@@ -27,7 +28,7 @@ struct AllNews: View {
                     ZStack{
                         Text("Refresh")
                             .foregroundColor(.whiteApp)
-                            .font(Font.system(size: 17))
+                            .font(Font.system(size: Sizes.sizeFontStandart))
                             .fontWeight(.medium)
                         HStack{
                             Spacer()
@@ -42,7 +43,7 @@ struct AllNews: View {
                     .background(Color.blueApp)
                     .cornerRadius(Sizes.cornerRadiusSmall)
                     .padding(Spacing.standart)
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal, Spacing.middle)
                 }
                 
             } else {

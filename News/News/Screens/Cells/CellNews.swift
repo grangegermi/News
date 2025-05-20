@@ -9,9 +9,12 @@ import SwiftUI
 
 struct CellNews: View {
     @EnvironmentObject var dataService: DataServices
-    let new: Result
+    @EnvironmentObject var alertManager: AlertManager
+    
     @State private var showAlert = false
     
+    let new: Result
+  
     var body: some View {
         ZStack{
             HStack{
@@ -26,18 +29,20 @@ struct CellNews: View {
                 .padding()
                 VStack(alignment: .leading){
                     HStack(alignment: .top){
-                        Link(destination: URL(string: new.url ?? "")!) {
-                            VStack(alignment: .leading){
-                                Text(new.title ?? "")
-                                    .lineLimit(1)
-                                    .foregroundColor(.blackApp)
-                                    .font(Font.system(size: 17))
-                                    .fontWeight(.medium)
-                                Text(new.abstract ?? "")
-                                    .lineLimit(1)
-                                    .font(Font.system(size: 15))
-                                    .foregroundColor(.greyApp)
-                                    .fontWeight(.regular)
+                        if let urlString = new.url, let url = URL(string: urlString) {
+                            Link(destination: url) {
+                                VStack(alignment: .leading){
+                                    Text(new.title ?? "")
+                                        .lineLimit(1)
+                                        .foregroundColor(.blackApp)
+                                        .font(Font.system(size: Sizes.sizeFontStandart))
+                                        .fontWeight(.medium)
+                                    Text(new.abstract ?? "")
+                                        .lineLimit(1)
+                                        .font(Font.system(size: Sizes.sizeFont))
+                                        .foregroundColor(.greyApp)
+                                        .fontWeight(.regular)
+                                }
                             }
                         }
                         Spacer()
@@ -54,40 +59,37 @@ struct CellNews: View {
                                                         section: new.section ?? "",
                                                         abstract: new.abstract ?? "")
                                 }else {
-                                    dataService.removeNews(id: String(new.id ?? 0))
-                                    
+                                    dataService.removeNews(id: String(new.id ?? 0))                                    
                                 }
                             },
                             .blocked: {
-                                showAlert = true
+                                alertManager.showCustomAlert(
+                                    title: "Do you want to block?",
+                                    message: "Confirm to hide this news source",
+                                    item: .blockButton,
+                                    onBlock: {
+                                        dataService.addNews(
+                                            id: String(new.id ?? 0),
+                                            title: new.title ?? "",
+                                            url: new.url ?? "",
+                                            image: new.media?.first?.mediaMetaData?.first?.url ?? "",
+                                            isBlocked: true,
+                                            publishedDate: new.formattedPublishedDate,
+                                            section: new.section ?? "",
+                                            abstract: new.abstract ?? ""
+                                        )
+                                    },
+                                    
+                                    onCancel: {}
+                                )
                             }
                         ], isFav:isFavorite
                         )
-                        .alert("Do you want to block?",
-                               isPresented: $showAlert,
-                               actions: {
-                            Button("Block", role: .destructive) {
-                                dataService.addNews(
-                                    id: String(new.id ?? 0),
-                                    title: new.title ?? "",
-                                    url: new.url ?? "",
-                                    image: new.media?.first?.mediaMetaData?.first?.url ?? "",
-                                    isBlocked: true,
-                                    publishedDate: new.formattedPublishedDate,
-                                    section: new.section ?? "",
-                                    abstract: new.abstract ?? ""
-                                )}
-                            Button("Cancel", role: .cancel) { }
-                        },
-                               message: {
-                            Text("Confirm to hide this news source")
-                        })
-                        
-                        .padding(.trailing, Spacing.standart)
                     }
+                    .padding(.trailing, Spacing.standart)
                     Text((new.section ?? "") + "•" + new.formattedPublishedDate)
                         .foregroundColor(.greyApp)
-                        .font(Font.system(size: 15))
+                        .font(Font.system(size: Sizes.sizeFont))
                 }
             }
             .background(Color.whiteApp)
@@ -96,7 +98,7 @@ struct CellNews: View {
             .frame(maxWidth: .infinity)
             .padding(.horizontal, Spacing.standart)
             .padding(.vertical, Spacing.standart)
+            
         }
-        
     }
 }
