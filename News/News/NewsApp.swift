@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct NewsApp: App {
+    @StateObject var network = NetworkService()
+    @StateObject var dataService = DataServices()
+    let persistenceController = PersistenceController.shared
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
+                .environmentObject(network)
+                .environmentObject(dataService)  
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
